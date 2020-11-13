@@ -1,12 +1,28 @@
+// import 'materialize-css';
+import 'materialize-css/dist/css/materialize.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import reduxThunk from 'redux-thunk';
+import reducers from './reducers';
+import App from './components/App';
+import { setAuthentification } from "./actions";
 import reportWebVitals from './reportWebVitals';
+
+const store = createStore(reducers, {}, applyMiddleware(reduxThunk));
+
+const token = localStorage.getItem("token");
+if (token) {
+  store.dispatch(setAuthentification(true));
+}
+console.log(token);
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>,
   </React.StrictMode>,
   document.getElementById('root')
 );
